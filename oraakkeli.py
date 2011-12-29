@@ -20,7 +20,7 @@ class Oraakkeli:
 	def getMsg(self, msg):
 		try:
 			self._initCurl()
-			self.curl.setopt(pycurl.URL, "http://leonarven.info/code/php/randomi.fi/oraakkeli.php?q="+msg)
+			self.curl.setopt(pycurl.URL, "http://leonarven.info/code/randomi.fi/oraakkeli.php?q="+msg)
 			self.curl.perform()
 			self.curl.close()
 			return self.responseData
