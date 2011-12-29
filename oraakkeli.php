@@ -14,5 +14,5 @@
 	ob_end_clean();
 
 	preg_match_all('/<div class=\'(.*)\'>(.*)<\/div>/', $content, $arr);
-	die(str_replace("ä", "&auml;", str_replace("ö", "&ouml;", $arr[2][2])));
+	die(htmlspecialchars($arr[2][2]));
 ?>

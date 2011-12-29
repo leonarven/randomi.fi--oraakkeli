@@ -41,8 +41,8 @@ class Botti:
 			elif (msg != ""):
 				responseMsg = self.oraakkeli.getMsg(msg)
 				self.chat.sendMsg(responseMsg)
-				print time.strftime("%X")+" < Stranger> "+msg
-				print time.strftime("%X")+" < Oracle> "+responseMsg
+				print time.strftime("%X")+" <+Stranger> "+msg
+				print time.strftime("%X")+" <+Oracle> "+responseMsg
 
 			if self.startTime+60 < int(time.clock()):
 				print time.strftime("%X")+" <@bot> Getting new stranger"
