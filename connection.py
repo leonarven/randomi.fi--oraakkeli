@@ -5,6 +5,7 @@ class Connection:
 	def __init__(self):
 		self.responseData = ""
 		self.userId = 0
+		self.errorCount = 0
 
 	def _initCurl(self):
 		self.responseData = ""
@@ -28,6 +29,7 @@ class Connection:
 			return self.responseData
 		except:
 			print "Error Curl: numberOfOnlineUsers"
+			self.errorCount+=1
 
 	def startChat(self):
 		try:
@@ -38,6 +40,7 @@ class Connection:
 			self.userId = self.responseData
 		except:
 			print "Error Curl: startChat"		
+			self.errorCount+=1
 
 	def leaveChat(self):
 		try:
@@ -47,6 +50,7 @@ class Connection:
 			self.curl.close()
 		except:
 			print "Error Curl: leaveChat"
+			self.errorCount+=1
 
 	def randomChat(self):
 		try:
@@ -57,6 +61,7 @@ class Connection:
 			self.strangerId = self.responseData
 		except:
 			print "Error Curl: randomChat"	
+			self.errorCount+=1
 
 	def getStrangerId(self):
 		return self.strangerId
@@ -79,6 +84,7 @@ class Connection:
 			self.receiveMsg = self.responseData
 		except:
 			print "Error Curl: listenToReceive"	
+			self.errorCount+=1
 
 	def getReceiveMsg(self):
 		return self.receiveMsg
@@ -91,6 +97,7 @@ class Connection:
 			self.curl.close()
 		except:
 			print "Error Curl"		
+			self.errorCount+=1
 
 	def typing(self):
 		try:
@@ -100,6 +107,7 @@ class Connection:
 			self.curl.close()
 		except:
 			print "Error Curl"	
+			self.errorCount+=1
 
 	def stopTyping(self):
 		try:
@@ -109,6 +117,7 @@ class Connection:
 			self.curl.close()
 		except:
 			print "Error Curl"
+			self.errorCount+=1
 
 	def isStyping(self):
 		try:
@@ -119,3 +128,4 @@ class Connection:
 			self.strangerTyping = self.responseData
 		except:
 			print "Error Curl"
+			self.errorCount+=1

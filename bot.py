@@ -27,11 +27,16 @@ class Botti:
 		self.chat.receiveMsg = ""
 		self.startTime = int(time.clock())
 
-	def run(self):
+	def startConversation(self):
 		responseMsg = self.oraakkeli.getMsg("moi")
 		self.chat.sendMsg(responseMsg)
 		print time.strftime("%X")+" <+Oracle> "+responseMsg
-		while(True):
+
+	def run(self):
+		self.startConversation()
+		self.chat.errorCount = 0
+		self.runningTime = int(time.clock()) - self.startTime
+		while(self.chat.errorCount < 5):
 			self.chat.listenToReceive()
 			msg = self.chat.getReceiveMsg()
 			msg = msg.replace("&auml;", "ä")
@@ -41,11 +46,14 @@ class Botti:
 			if(msg == "||--noResult--||"):
 				print time.strftime("%X")+" <@bot> Stranger leaved"
 				self.initChat()
+				self.startConversation()
+				self.chat.errorCount = 0
 			elif (msg != ""):
 				responseMsg = self.oraakkeli.getMsg(msg)
 				self.chat.sendMsg(responseMsg)
 				print time.strftime("%X")+" <+Stranger> "+msg
 				print time.strftime("%X")+" <+Oracle> "+responseMsg
+				self.chat.errorCount = 0
 
 			if self.startTime+60 < int(time.clock()):
 				responseMsg = "Ei sitten, jos niin hiljaista ollaan";
