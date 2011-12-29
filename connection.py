@@ -119,27 +119,3 @@ class Connection:
 			self.strangerTyping = self.responseData
 		except:
 			print "Error Curl"
-
-def test():
-	import time
-	c = Connection()
-	o = oraakkeli.Oraakkeli()
-	c.startChat()
-	c.randomChat()	
-	print c.getUserId()
-	print c.getStrangerId()
-
-	c.listenToReceive()
-	c.sendMsg("moro")
-	while(c.getReceiveMsg() != "||--noResult--||"):
-		c.listenToReceive()
-		if (c.getReceiveMsg() != ""):
-			print "Outo:"+c.getReceiveMsg()
-			oraakkeliVastaus = o.getMsg(c.getReceiveMsg())
-			print "Sina:"+oraakkeliVastaus
-			c.sendMsg(oraakkeliVastaus)
-		time.sleep(1)
-		
-
-if __name__ == "__main__":
-	test()
