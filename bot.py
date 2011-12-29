@@ -12,20 +12,19 @@ class Botti:
 		self.chat.setUserId("0")
 		self.chat.setStrangerId("0")
 
-		print "Get userId..."
+		print time.strftime("%X")+" <@bot> Get userId..."
 		while(self.chat.getUserId() == "0"):
 			self.chat.startChat()
 			time.sleep(1)
-		print "UserId: "+str(self.chat.getUserId())
+		print time.strftime("%X")+" <@bot> UserId: "+str(self.chat.getUserId())
 
-		print "Get strangerId..."
+		print time.strftime("%X")+" <@bot> Get strangerId..."
 		while(self.chat.getStrangerId() == "0"):
 			self.chat.randomChat()
 			time.sleep(1)
+		print time.strftime("%X")+" <@bot> StrangerId: "+str(self.chat.getStrangerId())
 
-		print "StrangerId: "+str(self.chat.getStrangerId())
 		self.chat.receiveMsg = ""
-
 		self.startTime = int(time.clock())
 
 	def run(self):
@@ -37,16 +36,16 @@ class Botti:
 			msg = msg.replace("&Auml;", "Ä")
 			msg = msg.replace("&Ouml;", "Ö")
 			if(msg == "||--noResult--||"):
-				print "Stranger leaved"
+				print time.strftime("%X")+" <@bot> Stranger leaved"
 				self.initChat()
 			elif (msg != ""):
 				responseMsg = self.oraakkeli.getMsg(msg)
 				self.chat.sendMsg(responseMsg)
-				print "Stranger: "+msg
-				print "You: "+responseMsg
+				print time.strftime("%X")+" < Stranger> "+msg
+				print time.strftime("%X")+" < Oracle> "+responseMsg
 
 			if self.startTime+60 < int(time.clock()):
-				print "Get new stranger"
+				print time.strftime("%X")+" <@bot> Getting new stranger"
 				self.initChat()
 
 			time.sleep(1)
