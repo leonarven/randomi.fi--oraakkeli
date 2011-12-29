@@ -1,5 +1,5 @@
 <?php
-	$msg = isset($_GET["q"])?$_GET["q"]:"moro";
+	$msg = $_GET["q"];
 	$url = "http://www.lintukoto.net/viihde/oraakkeli/index.php";
 	preg_match_all('/<input type=\'hidden\' name=\'rnd\' value=\'(.*)\'>/', file_get_contents($url), $arr);
 
@@ -14,5 +14,7 @@
 	ob_end_clean();
 
 	preg_match_all('/<div class=\'(.*)\'>(.*)<\/div>/', $content, $arr);
-	die(htmlspecialchars($arr[2][2]));
+	$return = htmlspecialchars($arr[2][2]);
+	file_put_contents("oraakkeli.log",file_get_contents("oraakkeli.log").$msg.": ".$return."\n");
+	die($return);
 ?>

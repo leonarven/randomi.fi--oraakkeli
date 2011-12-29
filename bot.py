@@ -7,6 +7,8 @@ class Botti:
 	def __init__(self):
 		self.chat = connection.Connection()
 		self.oraakkeli = oraakkeli.Oraakkeli()
+		self.chat.errorCount = 0
+		self.lastMessage = 0
 
 	def initChat(self):
 		self.chat.setUserId("0")
@@ -31,10 +33,11 @@ class Botti:
 		responseMsg = self.oraakkeli.getMsg("moi")
 		self.chat.sendMsg(responseMsg)
 		print time.strftime("%X")+" <+Oracle> "+responseMsg
+		self.chat.errorCount = 0
+		self.lastMessage = int(time.clock())
 
 	def run(self):
 		self.startConversation()
-		self.chat.errorCount = 0
 		self.runningTime = int(time.clock()) - self.startTime
 		while(self.chat.errorCount < 5):
 			self.chat.listenToReceive()
@@ -47,15 +50,15 @@ class Botti:
 				print time.strftime("%X")+" <@bot> Stranger leaved"
 				self.initChat()
 				self.startConversation()
-				self.chat.errorCount = 0
 			elif (msg != ""):
 				responseMsg = self.oraakkeli.getMsg(msg)
 				self.chat.sendMsg(responseMsg)
 				print time.strftime("%X")+" <+Stranger> "+msg
 				print time.strftime("%X")+" <+Oracle> "+responseMsg
 				self.chat.errorCount = 0
+				self.lastMessage = int(time.clock())
 
-			if self.startTime+60 < int(time.clock()):
+			if (int(time.clock())-self.lastMessage) > 30:
 				responseMsg = "Ei sitten, jos niin hiljaista ollaan";
 				self.chat.sendMsg(responseMsg)
 				print time.strftime("%X")+" <+Oracle> "+responseMsg
