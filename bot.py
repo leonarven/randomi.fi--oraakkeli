@@ -28,6 +28,9 @@ class Botti:
 		self.startTime = int(time.clock())
 
 	def run(self):
+		responseMsg = self.oraakkeli.getMsg("moi")
+		self.chat.sendMsg(responseMsg)
+		print time.strftime("%X")+" <+Oracle> "+responseMsg
 		while(True):
 			self.chat.listenToReceive()
 			msg = self.chat.getReceiveMsg()
@@ -45,6 +48,9 @@ class Botti:
 				print time.strftime("%X")+" <+Oracle> "+responseMsg
 
 			if self.startTime+60 < int(time.clock()):
+				responseMsg = "Ei sitten, jos niin hiljaista ollaan";
+				self.chat.sendMsg(responseMsg)
+				print time.strftime("%X")+" <+Oracle> "+responseMsg
 				print time.strftime("%X")+" <@bot> Getting new stranger"
 				self.initChat()
 
