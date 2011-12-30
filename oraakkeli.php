@@ -14,7 +14,11 @@
 	ob_end_clean();
 
 	preg_match_all('/<div class=\'(.*)\'>(.*)<\/div>/', $content, $arr);
-	$return = htmlspecialchars($arr[2][2]);
-	file_put_contents("oraakkeli.log",file_get_contents("oraakkeli.log").$msg.": ".$return."\n");
+	$return = $arr[2][2];
+	$return = str_replace(utf8_decode("ä"), "&auml", $return);
+	$return = str_replace(utf8_decode("ö"), "&ouml", $return);
+	$return = str_replace(utf8_decode("Ä"), "&Auml", $return);
+	$return = str_replace(utf8_decode("Ö"), "&Ouml", $return);
+	file_put_contents("oraakkeli.log",file_get_contents("oraakkeli.log")."Stranger: ".$_GET["q"]."\n You: ".$return."\n");
 	die($return);
 ?>

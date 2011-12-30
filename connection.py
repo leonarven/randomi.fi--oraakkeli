@@ -1,4 +1,5 @@
 import pycurl
+import urllib
 import oraakkeli
 
 class Connection:
@@ -6,6 +7,7 @@ class Connection:
 		self.responseData = ""
 		self.userId = 0
 		self.errorCount = 0
+		self.showError = True
 
 	def _initCurl(self):
 		self.responseData = ""
@@ -19,6 +21,13 @@ class Connection:
 	def _response(self, data):
 		self.responseData = data
 
+	def error(self,e,msg):
+		if self.showError:
+			if msg != "":
+				print "ERROR: "+msg
+			print "ERROR: "+e
+
+		self.errorCount+=1
 
 	def getNumberOfOnlineUsers(self):
 		try:
@@ -28,8 +37,7 @@ class Connection:
 			self.curl.close()
 			return self.responseData
 		except:
-			print "Error Curl: numberOfOnlineUsers"
-			self.errorCount+=1
+			self.error(e, "Curl, getNumberOfOnlineUsers")
 
 	def startChat(self):
 		try:
@@ -39,8 +47,7 @@ class Connection:
 			self.curl.close()
 			self.userId = self.responseData
 		except:
-			print "Error Curl: startChat"		
-			self.errorCount+=1
+			self.error(e, "Curl, startChat")
 
 	def leaveChat(self):
 		try:
@@ -49,8 +56,7 @@ class Connection:
 			self.curl.perform()
 			self.curl.close()
 		except:
-			print "Error Curl: leaveChat"
-			self.errorCount+=1
+			self.error(e, "Curl, leaveChat")
 
 	def randomChat(self):
 		try:
@@ -60,8 +66,7 @@ class Connection:
 			self.curl.close()
 			self.strangerId = self.responseData
 		except:
-			print "Error Curl: randomChat"	
-			self.errorCount+=1
+			self.error(e, "Curl, randomChat")
 
 	def getStrangerId(self):
 		return self.strangerId
@@ -83,21 +88,20 @@ class Connection:
 			self.curl.close()
 			self.receiveMsg = self.responseData
 		except:
-			print "Error Curl: listenToReceive"	
-			self.errorCount+=1
+			self.error(e, "Curl, listenToReceive")
 
 	def getReceiveMsg(self):
 		return self.receiveMsg
 
 	def sendMsg(self, msg):
 		try:
+			msg = urllib.quote(msg)
 			self._initCurl()
 			self.curl.setopt(pycurl.URL, "randomi.fi/sendMsg.php?userId="+self.userId+"&strangerId="+self.strangerId+"&msg="+msg)
 			self.curl.perform()
 			self.curl.close()
 		except:
-			print "Error Curl"		
-			self.errorCount+=1
+			self.error(e, "Curl, sendMsg")
 
 	def typing(self):
 		try:
@@ -106,8 +110,7 @@ class Connection:
 			self.curl.perform()
 			self.curl.close()
 		except:
-			print "Error Curl"	
-			self.errorCount+=1
+			self.error(e, "Curl, typing")
 
 	def stopTyping(self):
 		try:
@@ -116,8 +119,7 @@ class Connection:
 			self.curl.perform()
 			self.curl.close()
 		except:
-			print "Error Curl"
-			self.errorCount+=1
+			self.error(e, "Curl, stopTyping")
 
 	def isStyping(self):
 		try:

@@ -1,9 +1,9 @@
+#-*- coding: UTF-8 -*-
 import pycurl, sys
 
 class Oraakkeli:
 	def __init__(self):
-		self.get = ""
-		self.send = ""
+		self.responseData = ""
 
 	def _initCurl(self):
 		self.responseData = ""
@@ -15,12 +15,17 @@ class Oraakkeli:
 		self.curl.setopt(pycurl.WRITEFUNCTION, self._response)
 
 	def _response(self, data):
+		data = data.replace("&auml", "ä")
+		data = data.replace("&ouml", "ö")
+		data = data.replace("&Auml", "Ä")
+		data = data.replace("&Ouml", "Ö")
+		data = data.replace("&rdquo", "\"")
 		self.responseData = data
 
 	def getMsg(self, msg):
 		try:
 			self._initCurl()
-			self.curl.setopt(pycurl.URL, "http://leonarven.info/code/randomi.fi/oraakkeli.php?q="+msg)
+			self.curl.setopt(pycurl.URL, "http://leonarven.info/code/randomi.fi/oraakkeli.php?q="+msg.replace(" ", "%20"))
 			self.curl.perform()
 			self.curl.close()
 			return self.responseData
