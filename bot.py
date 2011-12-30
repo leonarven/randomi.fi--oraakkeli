@@ -31,47 +31,58 @@ class Botti:
 		print time.strftime("%X")+" <@bot> StrangerId: "+str(self.chat.getStrangerId())
 
 		self.chat.receiveMsg = ""
-		self.startTime = int(time.clock())
 
 	def startConversation(self):
-		responseMsg = self.oraakkeli.getMsg("moi")
-		self.chat.sendMsg(responseMsg)
-		print time.strftime("%X")+" <+Oracle> "+responseMsg
-		self.chat.errorCount = 0
-		self.lastMessage = int(time.clock())
+		say(self.oraakkeli.getMsg("moi"))
+		self.messagesCount	= 0
+		self.chat.errorCount	= 0
+		self.startTime			= int(time.time())
+
+	def say(self,msg):
+		time.sleep((60.0/self.marksPerMinute)*msg.__len__())
+		self.chat.sendMsg(msg)
+		print time.strftime("%X")+" <+Oracle> "+msg
+		self.lastMessage		= int(time.time())
+		self.messagesCount	+= 1
+		
 
 	def run(self):
 		self.startConversation()
-		self.messagesCount = 0
+		self.messagesCount	= 0
+		self.lastMessage		= int(time.time())
+
 		while(self.chat.errorCount < 5):
-			self.runningTime = int(time.clock()) - self.startTime
+			self.runningTime = int(time.time()) - self.startTime
 			self.chat.listenToReceive()
 			msg = self.chat.getReceiveMsg()
-			msg = msg.replace("&auml;", "ä")
-			msg = msg.replace("&ouml;", "ö")
-			msg = msg.replace("&Auml;", "Ä")
-			msg = msg.replace("&Ouml;", "Ö")
+
+
 			if(msg == "||--noResult--||"):
 				print time.strftime("%X")+" <@bot> Stranger leaved"
+				print time.strftime("%X")+" <@debug> messagesCount: "+str(self.messagesCount)
+				print time.strftime("%X")+" <@debug> lastMessage: "+str(self.lastMessage)
+				print time.strftime("%X")+" <@debug> runningTime: "+str(self.runningTime)
 				self.initChat()
 				self.startConversation()
 			elif (msg != ""):
+				msg = msg.replace("&auml;", "ä")
+				msg = msg.replace("&ouml;", "ö")
+				msg = msg.replace("&Auml;", "Ä")
+				msg = msg.replace("&Ouml;", "Ö")
 				print time.strftime("%X")+" <+Stranger> "+msg
-				responseMsg = self.oraakkeli.getMsg(msg)
-				time.sleep((60.0/self.marksPerMinute)*responseMsg.__len__())
-				self.chat.sendMsg(responseMsg)
-				print time.strftime("%X")+" <+Oracle> "+responseMsg
+				self.say(self.oraakkeli.getMsg(msg))
 
-				self.chat.errorCount = 0
-				self.lastMessage = int(time.clock())
-				self.messagesCount += 1
 
-			if ((self.messagesCount == 0 and self.runningTime > 30) or ((self.lastMessage+30) < int(time.clock()))):
-				responseMsg = "Ei sitten, jos niin hiljaista ollaan";
-				self.chat.sendMsg(responseMsg)
-				print time.strftime("%X")+" <+Oracle> "+responseMsg
+			if ((self.lastMessage+20) < int(time.time()) and self.messagesCount != 0):
+				say (self.oraakkeli.getMsg("millainen olen?"))
+
+
+			if ((self.messagesCount == 0 and self.runningTime > 30) or ((self.lastMessage+50) < int(time.time()))):
+				self.say("Ei sitten, jos niin hiljaista ollaan")
 				print time.strftime("%X")+" <@bot> Getting new stranger"
 				self.initChat()
+				self.startConversation()
+
 
 			time.sleep(1)
 				
